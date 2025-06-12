@@ -10,8 +10,8 @@ const ExistingClaimsComponent : React.FC<Props> = ({
     claims
 }) => {
 
-		const status = useSelector((state: RootState) => state.claims.fetchStatus);
-		const error = useSelector((state: RootState) => state.claims.fetchError);
+	const status = useSelector((state: RootState) => state.claims.fetchStatus);
+	const error = useSelector((state: RootState) => state.claims.fetchError);
 
 	const statusText =
   status === 'loading'
