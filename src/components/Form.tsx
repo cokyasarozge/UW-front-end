@@ -1,10 +1,5 @@
-import React, {useRef} from 'react'
-
-interface formData {
-	claimDate: string;
-	category: string;
-	description: string;
-}
+import React, {useRef, useState} from 'react'
+import { formData } from '../types'
 
 interface Props {
 	handleSubmit: (e: React.FormEvent) => void;
@@ -21,6 +16,27 @@ const Form : React.FC<Props> = ({
 }) => {
 	const categoryRef = useRef<HTMLInputElement>(null);
 	const descriptionRef = useRef<HTMLInputElement>(null);
+  const [formErrors, setFormErrors] = useState<Partial<formData>>({});
+
+
+  const validate = () => {
+    const errors: Partial<formData> = {};
+    if (!formInput.claimDate) errors.claimDate = 'Claim date is required.';
+    if (!formInput.category) errors.category = 'Category is required.';
+    if (!formInput.description || formInput.description.length < 10) {
+      errors.description = 'Description must be at least 10 characters.';
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+	const wrappedSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validate()) {
+      handleSubmit(e);
+      setFormErrors({});
+    }
+  };
 
 	const goToCategoryInput = (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -31,35 +47,46 @@ const Form : React.FC<Props> = ({
 		e.preventDefault();
 		descriptionRef.current?.focus();
 	};
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name } = e.target;
+		if (formErrors[name as keyof formData]) {
+			setFormErrors(prev => ({ ...prev, [name]: undefined }));
+		}
+		handleFormChange(e);
+	};
+
   return (
-    <div>
-			<form onSubmit={handleSubmit}>
-				<div>
-					<label>
-						Claim Date
-						<input type="date" name="claimDate" value={formInput.claimDate} onChange={handleFormChange} />
-					</label>
-					<button onClick={goToCategoryInput}>Next</button>
-				</div>
-				<div>
-				<label>
-					Category
-					<input ref={categoryRef} name="category" value={formInput.category} onChange={handleFormChange} />
-					</label>
-					<button onClick={goToDescriptionInput}>Next</button>
-				</div>
-				<div>
-					<label>
-						Description
-						<input ref={descriptionRef} name="description" value={formInput.description} onChange={handleFormChange} />
-					</label>
-					<button 
-						disabled={disabled} 
-						type="submit"
-					>
-						Submit
-					</button>
-				</div>
+    <div className='form-container'>
+			<form onSubmit={wrappedSubmit}>
+
+					<div>
+						<span>
+							<label htmlFor="claimDate">Claim Date</label>
+							<p className='errormessage'>{formErrors.claimDate ? formErrors.claimDate : ''}</p>
+							<input className={formErrors.claimDate && 'error'} type="date" name="claimDate" value={formInput.claimDate} onChange={handleChange} />
+						</span>
+						<button type="button" onClick={goToCategoryInput}>Next</button>
+					</div>
+
+					<div>
+						<span>
+							<label htmlFor="category">Category</label>
+							<p className='errormessage'>{formErrors.category ? formErrors.category : ''}</p>
+							<input className={formErrors.category && 'error'} ref={categoryRef} name="category" value={formInput.category} onChange={handleChange} />
+						</span>
+							<button type="button" onClick={goToDescriptionInput}>Next</button>
+					</div>
+
+					<div>
+						<span>
+							<label htmlFor="description">Description</label>
+							<p className='errormessage'>{formErrors.description ? formErrors.description : ''}</p>
+							<input className={formErrors.description && 'error'} ref={descriptionRef} name="description" value={formInput.description} onChange={handleChange} />
+						</span>
+						<button type="submit">Submit</button>
+					</div>
+
 			</form>
     </div>
   )

@@ -1,16 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-
-interface ClaimData {
-  claimDate: string;
-  category: string;
-  description: string;
-}
-
-interface ClaimState {
-  claims: ClaimData[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
-}
+import { ClaimState, ClaimData } from '../types'
 
 const initialState: ClaimState = {
   claims: [],
@@ -18,12 +7,14 @@ const initialState: ClaimState = {
   error: null
 };
 
+const URL = "http://localhost:3001" // backend url
+
 // GET: Fetch all claims
 export const fetchClaims = createAsyncThunk(
   'claims/fetchClaims',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:3001/claims');
+      const response = await fetch(`${URL}/claims`);
       if (!response.ok) throw new Error('Failed to fetch claims');
       const data = await response.json();
       return data;
@@ -38,7 +29,7 @@ export const submitClaim = createAsyncThunk(
   'claims/submitClaim',
   async (formData: ClaimData, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:3001/submit-claim', {
+      const response = await fetch(`${URL}/submit-claim`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -65,18 +56,18 @@ const claimsSlice = createSlice({
   extraReducers: (builder) => {
     // Submit claim
     builder
-      .addCase(submitClaim.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
+      // .addCase(submitClaim.pending, (state) => {
+      //   state.status = 'loading';
+      //   state.error = null;
+      // })
       .addCase(submitClaim.fulfilled, (state, action: PayloadAction<ClaimData>) => {
         state.status = 'succeeded';
         state.claims.push(action.payload);
       })
-      .addCase(submitClaim.rejected, (state, action: PayloadAction<any>) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      });
+      // .addCase(submitClaim.rejected, (state, action: PayloadAction<any>) => {
+      //   state.status = 'failed';
+      //   state.error = action.payload;
+      // });
 
     // Fetch claims
     builder

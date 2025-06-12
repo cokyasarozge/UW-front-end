@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import { formData } from './types'
 
 import './App.css';
 import { fetchClaims, submitClaim } from './store/claimsSlice';
 import type { AppDispatch, RootState } from './store/store';
 import Form from './components/Form';
 
-
-interface formData {
-  claimDate: string;
-  category: string;
-  description: string;
-}
 
 function App() {
   const [formInput, setFormInput] = useState<formData>({claimDate: '', category: '', description: ''})
@@ -39,6 +34,13 @@ function App() {
 
   const disabled = !formInput.description || !formInput.category || !formInput.claimDate
 
+  const statusText =
+  status === 'loading'
+    ? 'Loading claims...'
+    : status === 'failed'
+    ? `Error: ${error}`
+    : null; 
+    
   return (
     <div className="App">
       <header className="App-header">
@@ -53,12 +55,12 @@ function App() {
         />
         {claims.length ? <p>Existing claims:</p> : null}
         <ul>
-          {
+          {status === 'succeeded' ?
             claims.map(claim => {
               return (
                 <li>{claim.description}</li>
               )
-            })
+            }) : <p>{statusText}</p>
           }
         </ul>
       </header>
