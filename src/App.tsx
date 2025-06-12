@@ -47,7 +47,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="App-container">
         <h3>
           Claims Handling Form
         </h3>
@@ -57,6 +57,7 @@ function App() {
             handleFormChange={handleFormChange}
             disabled={disabled}
         />
+        <div className='existing-claims-container'>
         {claims.length ? <p>Existing claims:</p> : null}
         <ul>
           {status === 'succeeded' ?
@@ -67,7 +68,8 @@ function App() {
             }) : <p>{statusText}</p>
           }
         </ul>
-      </header>
+        </div>
+      </div>
     </div>
   );
 }
