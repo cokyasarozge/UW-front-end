@@ -1,5 +1,7 @@
 import React, {useRef, useState} from 'react'
 import { formData } from '../types'
+import { useSelector } from 'react-redux'
+import type { RootState } from '../store/store';
 
 interface Props {
 	handleSubmit: (e: React.FormEvent) => void;
@@ -14,6 +16,9 @@ const Form : React.FC<Props> = ({
 	handleFormChange,
 	disabled
 }) => {
+  const status = useSelector((state: RootState) => state.claims.postStatus);
+  const error = useSelector((state: RootState) => state.claims.postError);
+
 	const categoryRef = useRef<HTMLInputElement>(null);
 	const descriptionRef = useRef<HTMLInputElement>(null);
   const [formErrors, setFormErrors] = useState<Partial<formData>>({});
@@ -84,7 +89,8 @@ const Form : React.FC<Props> = ({
 							<p className='errormessage'>{formErrors.description ? formErrors.description : ''}</p>
 							<input className={formErrors.description && 'error'} ref={descriptionRef} name="description" value={formInput.description} onChange={handleChange} />
 						</span>
-						<button type="submit">Submit</button>
+						{error && <p>{error}</p> }
+						<button type="submit">{status === 'loading' ? 'Loading' : 'Submit'}</button>
 					</div>
 
 			</form>

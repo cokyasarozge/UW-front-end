@@ -12,7 +12,9 @@ export interface ClaimData {
   
 export interface ClaimState {
     claims: ClaimData[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
-    error: string | null;
+    fetchStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    fetchError: string | null;
+    postStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    postError: string | null;
 }
   

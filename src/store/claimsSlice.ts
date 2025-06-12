@@ -3,8 +3,10 @@ import { ClaimState, ClaimData } from '../types'
 
 const initialState: ClaimState = {
   claims: [],
-  status: 'idle',
-  error: null
+  fetchStatus: 'idle',
+  fetchError: null,
+  postStatus: 'idle',
+  postError: null,
 };
 
 const URL = "http://localhost:3001" // backend url
@@ -56,32 +58,32 @@ const claimsSlice = createSlice({
   extraReducers: (builder) => {
     // Submit claim
     builder
-      // .addCase(submitClaim.pending, (state) => {
-      //   state.status = 'loading';
-      //   state.error = null;
-      // })
+      .addCase(submitClaim.pending, (state) => {
+        state.postStatus = 'loading';
+        state.postError = null;
+      })
       .addCase(submitClaim.fulfilled, (state, action: PayloadAction<ClaimData>) => {
-        state.status = 'succeeded';
+        state.postStatus = 'succeeded';
         state.claims.push(action.payload);
       })
-      // .addCase(submitClaim.rejected, (state, action: PayloadAction<any>) => {
-      //   state.status = 'failed';
-      //   state.error = action.payload;
-      // });
+      .addCase(submitClaim.rejected, (state, action) => {
+        state.postStatus = 'failed';
+        state.postError = action.payload as string;
+      });
 
     // Fetch claims
     builder
       .addCase(fetchClaims.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
+        state.fetchStatus = 'loading';
+        state.fetchError = null;
       })
       .addCase(fetchClaims.fulfilled, (state, action: PayloadAction<ClaimData[]>) => {
-        state.status = 'succeeded';
+        state.fetchStatus = 'succeeded';
         state.claims = action.payload;
       })
-      .addCase(fetchClaims.rejected, (state, action: PayloadAction<any>) => {
-        state.status = 'failed';
-        state.error = action.payload;
+      .addCase(fetchClaims.rejected, (state, action) => {
+        state.fetchStatus = 'failed';
+        state.fetchError = action.payload as string;
       });
   }
 });
