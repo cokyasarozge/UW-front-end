@@ -1,8 +1,3 @@
-export interface formData {
-	claimDate: string;
-	category: string;
-	description: string;
-}
 
 export interface ClaimData {
     claimDate: string;

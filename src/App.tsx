@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { formData } from './types'
+import { ClaimData } from './types'
 
 import './App.css';
 import { fetchClaims, submitClaim } from './store/claimsSlice';
@@ -9,7 +9,7 @@ import Form from './components/Form';
 
 
 function App() {
-  const [formInput, setFormInput] = useState<formData>({claimDate: '', category: '', description: ''})
+  const [formInput, setFormInput] = useState<ClaimData>({claimDate: '', category: '', description: ''})
   const dispatch = useDispatch<AppDispatch>();
   const status = useSelector((state: RootState) => state.claims.fetchStatus);
   const error = useSelector((state: RootState) => state.claims.fetchError);

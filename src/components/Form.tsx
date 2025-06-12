@@ -1,12 +1,12 @@
 import React, {useRef, useState} from 'react'
-import { formData } from '../types'
+import { ClaimData } from '../types'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../store/store';
 
 interface Props {
 	handleSubmit: (e: React.FormEvent) => void;
 	handleFormChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	formInput: formData;
+	formInput: ClaimData;
 	disabled: boolean;
 }
 
@@ -21,11 +21,11 @@ const Form : React.FC<Props> = ({
 
 	const categoryRef = useRef<HTMLInputElement>(null);
 	const descriptionRef = useRef<HTMLInputElement>(null);
-  const [formErrors, setFormErrors] = useState<Partial<formData>>({});
+  const [formErrors, setFormErrors] = useState<Partial<ClaimData>>({});
 
 
   const validate = () => {
-    const errors: Partial<formData> = {};
+    const errors: Partial<ClaimData> = {};
     if (!formInput.claimDate) errors.claimDate = 'Claim date is required.';
     if (!formInput.category) errors.category = 'Category is required.';
     if (!formInput.description || formInput.description.length < 10) {
@@ -55,7 +55,7 @@ const Form : React.FC<Props> = ({
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name } = e.target;
-		if (formErrors[name as keyof formData]) {
+		if (formErrors[name as keyof ClaimData]) {
 			setFormErrors(prev => ({ ...prev, [name]: undefined }));
 		}
 		handleFormChange(e);
