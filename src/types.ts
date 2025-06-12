@@ -3,6 +3,7 @@ export interface ClaimData {
     claimDate: string;
     category: string;
     description: string;
+    id?: number;
   }
   
 export interface ClaimState {

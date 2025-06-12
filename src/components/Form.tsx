@@ -7,14 +7,12 @@ interface Props {
 	handleSubmit: (e: React.FormEvent) => void;
 	handleFormChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	formInput: ClaimData;
-	disabled: boolean;
 }
 
 const Form : React.FC<Props> = ({
 	formInput,
 	handleSubmit,
 	handleFormChange,
-	disabled
 }) => {
   const status = useSelector((state: RootState) => state.claims.postStatus);
   const error = useSelector((state: RootState) => state.claims.postError);

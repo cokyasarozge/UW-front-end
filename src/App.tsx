@@ -6,19 +6,17 @@ import './App.css';
 import { fetchClaims, submitClaim } from './store/claimsSlice';
 import type { AppDispatch, RootState } from './store/store';
 import Form from './components/Form';
+import ExistingClaims from './components/ExistingClaims';
 
 
 function App() {
   const [formInput, setFormInput] = useState<ClaimData>({claimDate: '', category: '', description: ''})
   const dispatch = useDispatch<AppDispatch>();
-  const status = useSelector((state: RootState) => state.claims.fetchStatus);
-  const error = useSelector((state: RootState) => state.claims.fetchError);
   const claims = useSelector((state: RootState) => state.claims.claims);
 
   useEffect(() => {
     dispatch(fetchClaims());
   }, [dispatch]);
-
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,15 +34,6 @@ function App() {
     }
   };
 
-  const disabled = !formInput.description || !formInput.category || !formInput.claimDate
-
-  const statusText =
-  status === 'loading'
-    ? 'Loading claims...'
-    : status === 'failed'
-    ? `Error: ${error}`
-    : null; 
-
   return (
     <div className="App">
       <div className="App-container">
@@ -55,20 +44,10 @@ function App() {
             formInput={formInput}
             handleSubmit={handleSubmit}
             handleFormChange={handleFormChange}
-            disabled={disabled}
         />
-        <div className='existing-claims-container'>
-        {claims.length ? <p>Existing claims:</p> : null}
-        <ul>
-          {status === 'succeeded' ?
-            claims.map(claim => {
-              return (
-                <li>{claim.description}</li>
-              )
-            }) : <p>{statusText}</p>
-          }
-        </ul>
-        </div>
+          <ExistingClaims
+            claims={claims}
+          />
       </div>
     </div>
   );
