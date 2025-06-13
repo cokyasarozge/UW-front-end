@@ -1,0 +1,26 @@
+form {
+    > div {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 30px;
+
+        .input-error {
+            font-size: 13px;
+            color: red;
+            margin-bottom: 0px;
+        }
+    }
+}
+
+.existing-claims {
+    > div {
+        font-size: 15px;
+        border: 1px solid white;
+        padding: 10px;
+        
+        p {
+            padding: 0px;
+            margin: 0px 0px 10px 0px;
+        }
+    }
+}

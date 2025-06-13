@@ -15,8 +15,8 @@ interface Props {
 
 const ExistingClaims : React.FC<Props> = ({claims, setClaims}) => {
   return (
-    <div>
-        <h3>Existing Claims</h3>
+    <div className='existing-claims'>
+        <h5>Existing Claims</h5>
         {claims.map((item) => {
             return (
                 <SingleClaim

@@ -6,11 +6,14 @@ import { Claim, Error, formComponents} from './helpers'
 import { useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from '../../store/store';
 import { fetchClaims, submitClaim } from '../../store/claimsSlice';
+import './styles.css';
+
 
 const ClaimsContainer = () => {
     const claimsData = useSelector((state: RootState) => state.claims.claims);
+    const claimReset = {date: '', category: '', description: '', id: null}
     
-    const [claim, setClaim] = useState<Claim>({date: '', category: '', description: '', id: null})
+    const [claim, setClaim] = useState<Claim>(claimReset)
     const [claims, setClaims] = useState<Claim[]>(claimsData)
     const [error, setError] = useState<Error>({date: false, category: false, description: false})
     const dispatch = useDispatch<AppDispatch>();
@@ -26,8 +29,6 @@ const ClaimsContainer = () => {
       dispatch(fetchClaims());
     }, [dispatch]); // why use dispatch here?
  
-
-    console.log('claimsData', claimsData)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -49,7 +50,7 @@ const ClaimsContainer = () => {
           try {
             await dispatch(submitClaim(claim)).unwrap();
             await dispatch(fetchClaims());
-            setClaim({ date: '', category: '', description: '', id: null });
+            setClaim(claimReset);
           } catch (err) {
             console.error('Submission failed:', err);
           }
@@ -60,7 +61,7 @@ const ClaimsContainer = () => {
 
   return (
     <div>
-        <h1>Claims Form</h1>
+        <h3>Claims Form</h3>
         <ClaimsForm 
             handleSubmit={handleSubmit}
             formComponents={formComponents}

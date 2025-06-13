@@ -15,9 +15,6 @@ function AppComponent() {
   return (
     <div className="App">
       <div className="App-container">
-        <h3>
-          Claims Handling Form
-        </h3>
         <ClaimsContainer />
         {/* <Form />
         <ExistingClaims/>

@@ -16,13 +16,13 @@ type inputType = 'date' | 'select' | 'text'
 export interface FormComponent {
     type: inputType;
     name: string;
-    formLabel: string;
+    inputLabel: string;
 }
 
 export const formComponents : FormComponent[] = [
-    {type: 'date', name: 'date', formLabel: 'Claim date'},
-    {type: 'select', name: 'category', formLabel: 'Category'},
-    {type: 'text', name: 'description', formLabel: 'Description'}
+    {type: 'date', name: 'date', inputLabel: 'Claim date'},
+    {type: 'select', name: 'category', inputLabel: 'Category'},
+    {type: 'text', name: 'description', inputLabel: 'Description'}
 ]
 
 export const categories = [
