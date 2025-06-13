@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { ClaimState, ClaimData } from '../types'
+import { ClaimState, ClaimData } from './types'
 
 const initialState: ClaimState = {
   claims: [],
@@ -26,6 +26,32 @@ export const fetchClaims = createAsyncThunk(
   }
 );
 
+// PUT: Edit an existing claim
+export const editClaim = createAsyncThunk(
+  'claims/editClaim',
+  async (updatedClaim: ClaimData, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${URL}/claims/${updatedClaim.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedClaim)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to update claim');
+      }
+
+      return updatedClaim; // return the updated data
+    } catch (err: any) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+
 // POST: Submit a new claim
 export const submitClaim = createAsyncThunk(
   'claims/submitClaim',
@@ -50,6 +76,30 @@ export const submitClaim = createAsyncThunk(
     }
   }
 );
+
+
+export const deleteClaim = createAsyncThunk(
+  'claims/deleteClaim',
+  async (claimId: (number | null), { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${URL}/claims/${claimId}`,
+        {
+          method: 'DELETE'
+        }
+      )
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to delete claim');
+      }
+
+      return claimId; // or await response.json() if API returns something
+      } catch (err: any) {
+        return rejectWithValue(err.message);
+      }
+    
+  }
+)
 
 const claimsSlice = createSlice({
   name: 'claims',
@@ -84,6 +134,40 @@ const claimsSlice = createSlice({
       .addCase(fetchClaims.rejected, (state, action) => {
         state.fetchStatus = 'failed';
         state.fetchError = action.payload as string;
+      });
+
+    // DELETE claim
+    builder
+      .addCase(deleteClaim.pending, (state) => {
+        state.postStatus = 'loading';
+        state.postError = null;
+      })
+      .addCase(deleteClaim.fulfilled, (state, action: PayloadAction<number | null>) => {
+        state.postStatus = 'succeeded';
+        // delete logic here
+        state.claims = state.claims.filter(claim => claim.id !== action.payload);
+      })
+      .addCase(deleteClaim.rejected, (state, action) => {
+        state.postStatus = 'failed';
+        state.postError = action.payload as string;
+      });
+
+      // Edit claim
+      builder
+      .addCase(editClaim.pending, (state) => {
+        state.postStatus = 'loading';
+        state.postError = null;
+      })
+      .addCase(editClaim.fulfilled, (state, action: PayloadAction<ClaimData>) => {
+        state.postStatus = 'succeeded';
+        const index = state.claims.findIndex(claim => claim.id === action.payload.id);
+        if (index !== -1) {
+          state.claims[index] = action.payload;
+        }
+      })
+      .addCase(editClaim.rejected, (state, action) => {
+        state.postStatus = 'failed';
+        state.postError = action.payload as string;
       });
   }
 });
