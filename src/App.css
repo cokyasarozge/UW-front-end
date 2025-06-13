@@ -8,44 +8,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
   margin: auto;
   width: 500px;
   @media only screen and (max-width: 700px) {
     width: 100%;
+    margin: 20px;
   }
-}
-
-.form-container {
-  width: 300px;
-}
-
-form {
-  width: 100%;
-  text-align: left;
-  input.error {
-    border: 2px solid red;
-  }
-
-  .errormessage {
-    color: red;
-    font-size: 13px;
-    margin: 0px;
-  }
-
-  label {
-    font-size: 13px;
-  }
-}
-
-ul {
-  text-align: left;
-  font-size: 13px;
-  margin: 0px;
-  padding-left: 10px;
-}
-
-.existing-claims-container {
-  text-align: left;
 }

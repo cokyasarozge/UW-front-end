@@ -7,6 +7,10 @@ const initialState: ClaimState = {
   fetchError: null,
   postStatus: 'idle',
   postError: null,
+  deleteStatus: 'idle',
+  deleteError: null,
+  editStatus: 'idle',
+  editError: null,
 };
 
 const URL = "http://localhost:3001" // backend url
@@ -78,6 +82,7 @@ export const submitClaim = createAsyncThunk(
 );
 
 
+// DELETE: delete claim
 export const deleteClaim = createAsyncThunk(
   'claims/deleteClaim',
   async (claimId: (number | null), { rejectWithValue }) => {
@@ -139,35 +144,35 @@ const claimsSlice = createSlice({
     // DELETE claim
     builder
       .addCase(deleteClaim.pending, (state) => {
-        state.postStatus = 'loading';
-        state.postError = null;
+        state.deleteStatus = 'loading';
+        state.deleteError = null;
       })
       .addCase(deleteClaim.fulfilled, (state, action: PayloadAction<number | null>) => {
-        state.postStatus = 'succeeded';
+        state.deleteStatus = 'succeeded';
         // delete logic here
         state.claims = state.claims.filter(claim => claim.id !== action.payload);
       })
       .addCase(deleteClaim.rejected, (state, action) => {
-        state.postStatus = 'failed';
-        state.postError = action.payload as string;
+        state.deleteStatus = 'failed';
+        state.deleteError = action.payload as string;
       });
 
       // Edit claim
       builder
       .addCase(editClaim.pending, (state) => {
-        state.postStatus = 'loading';
-        state.postError = null;
+        state.editStatus = 'loading';
+        state.editError = null;
       })
       .addCase(editClaim.fulfilled, (state, action: PayloadAction<ClaimData>) => {
-        state.postStatus = 'succeeded';
+        state.editStatus = 'succeeded';
         const index = state.claims.findIndex(claim => claim.id === action.payload.id);
         if (index !== -1) {
           state.claims[index] = action.payload;
         }
       })
       .addCase(editClaim.rejected, (state, action) => {
-        state.postStatus = 'failed';
-        state.postError = action.payload as string;
+        state.editStatus = 'failed';
+        state.editError = action.payload as string;
       });
   }
 });

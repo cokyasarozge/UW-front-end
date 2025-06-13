@@ -15,5 +15,9 @@ export interface ClaimState {
     fetchError: errorType;
     postStatus: statusType;
     postError: errorType;
+    deleteStatus: statusType,
+    deleteError: errorType,
+    editStatus: statusType,
+    editError: errorType,
 }
   
