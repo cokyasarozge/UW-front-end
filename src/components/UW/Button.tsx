@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormComponent } from './helpers'
+import { FormComponent } from './types'
 
 interface Props {
     goToNext: React.MouseEventHandler<HTMLButtonElement>;
@@ -14,8 +14,9 @@ const Button = ({
     formComponents,
     formItem
 } : Props) => {
+  const isLast = formComponents.length - 1 === index
   return (
-    formComponents.length - 1 === index ? 
+    isLast ? 
       <button type="submit">Submit</button>
     :
     <button 
@@ -23,7 +24,7 @@ const Button = ({
       onClick={goToNext}
       aria-label={`Go to next field after ${formItem.name}`}
     >
-        Next
+      Next
     </button>
               
   )

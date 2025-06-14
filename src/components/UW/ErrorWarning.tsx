@@ -1,8 +1,8 @@
-import { FormErrors, FormComponent} from './helpers'
+import { FormErrors, FormComponent} from './types'
 
 interface Props {
-    error: FormErrors;
-    formItem: FormComponent;
+  error: FormErrors;
+  formItem: FormComponent;
 }
 
 const ErrorWarning = ({

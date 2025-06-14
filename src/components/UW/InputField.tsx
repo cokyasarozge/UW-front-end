@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormComponent, Claim, categories, FormErrors } from './helpers'
+import { FormComponent, Claim, categories, FormErrors } from './types'
 
 interface Props {
   formItem: FormComponent;

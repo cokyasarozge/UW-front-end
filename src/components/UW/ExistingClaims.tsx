@@ -27,9 +27,7 @@ const ExistingClaims : React.FC<Props> = ({claims, setClaims, fetchStatus}) => {
         return (
           <SingleClaim
             key={item.id} 
-            claims={claims} 
-            claim={item} 
-            setClaims={setClaims} 
+            claim={item}
           />
         )
       })}

@@ -2,15 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ExistingClaims from './ExistingClaims';
 import ClaimsForm from './ClaimsForm';
-import { Claim, FormErrors, formComponents} from './helpers'
+import { Claim, FormErrors, formComponents} from './types'
 import type { RootState, AppDispatch } from '../../store/store';
 import { fetchClaims, submitClaim } from '../../store/claimsSlice';
 import './styles.css';
-
-// TO DO
-// SUCCESSFULLY SUBMIT CLAIM
-// SUBMIT WITH EMPTY FIELDS
-// WHEN THERE IS VALIDATION ERRORS I NEED TO GET RID OF SUCCESS MESSAGE
 
 const ClaimsContainer = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,18 +16,16 @@ const ClaimsContainer = () => {
   const [claim, setClaim] = useState<Claim>(claimReset)
   const [claims, setClaims] = useState<Claim[]>(claimsData.claims)
   const [error, setError] = useState<FormErrors>({date: false, category: false, description: false})
-  
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target
-      setClaim(prev => ({...prev, [name]: value, id: Date.now() }))
+    const { name, value } = e.target
+    setClaim(prev => ({...prev, [name]: value, id: Date.now() }))
   }
 
   // GET CLAIMS
   useEffect(() => {
-    // setClaims(claimsData) why can't i use this one? explain.
     dispatch(fetchClaims());
-  }, [dispatch]); // why use dispatch here?
+  }, [dispatch]); 
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,7 +46,7 @@ const ClaimsContainer = () => {
         
       // POST CLAIM
       try {
-        await dispatch(submitClaim(claim)).unwrap(); // why use unwrap here? what is unwrap?
+        await dispatch(submitClaim(claim)).unwrap();
         await dispatch(fetchClaims());
         setClaim(claimReset);
       } catch (err) {
@@ -64,7 +57,6 @@ const ClaimsContainer = () => {
 
   return (
     <div>
-      <h3>Claims Form</h3>
       <ClaimsForm 
         handleSubmit={handleSubmit}
         formComponents={formComponents}

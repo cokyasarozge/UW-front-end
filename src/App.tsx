@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './App.css';
-import ClaimsContainer from './components/Practice/ClaimsContainer';
+import ClaimsContainer from './components/UW/ClaimsContainer';
 // import TodoApp from './components/NewToDo/TodoApp';
 
 
