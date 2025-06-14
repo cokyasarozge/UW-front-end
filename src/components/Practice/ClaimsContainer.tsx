@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ExistingClaims from './ExistingClaims';
 import ClaimsForm from './ClaimsForm';
-import { Claim, Error, formComponents} from './helpers'
+import { Claim, FormErrors, formComponents} from './helpers'
 import type { RootState, AppDispatch } from '../../store/store';
 import { fetchClaims, submitClaim } from '../../store/claimsSlice';
 import './styles.css';
@@ -20,7 +20,7 @@ const ClaimsContainer = () => {
   
   const [claim, setClaim] = useState<Claim>(claimReset)
   const [claims, setClaims] = useState<Claim[]>(claimsData.claims)
-  const [error, setError] = useState<Error>({date: false, category: false, description: false})
+  const [error, setError] = useState<FormErrors>({date: false, category: false, description: false})
   
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +28,7 @@ const ClaimsContainer = () => {
       setClaim(prev => ({...prev, [name]: value, id: Date.now() }))
   }
 
-    // GET CLAIMS
+  // GET CLAIMS
   useEffect(() => {
     // setClaims(claimsData) why can't i use this one? explain.
     dispatch(fetchClaims());
@@ -36,32 +36,30 @@ const ClaimsContainer = () => {
 
 
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault()
+    e.preventDefault()
 
-      const newError: Error = {
-          date: !claim.date.trim(),
-          category: !claim.category.trim(),
-          description: !claim.description.trim()
-      };
+    const newError: FormErrors = {
+      date: !claim.date.trim(),
+      category: !claim.category.trim(),
+      description: !claim.description.trim()
+    };
 
-      setError(newError)
-      
-      const hasError = Object.values(newError).some(Boolean);
+    setError(newError)
+    
+    const hasError = Object.values(newError).some(Boolean);
 
-      if (!hasError) {
-          setClaims([...claims, claim])
-          
-        // POST CLAIM
-        try {
-          await dispatch(submitClaim(claim)).unwrap();
-          await dispatch(fetchClaims());
-          setClaim(claimReset);
-        } catch (err) {
-          console.error('Submission failed:', err);
-        }
-
-
-      } 
+    if (!hasError) {
+        setClaims([...claims, claim])
+        
+      // POST CLAIM
+      try {
+        await dispatch(submitClaim(claim)).unwrap(); // why use unwrap here? what is unwrap?
+        await dispatch(fetchClaims());
+        setClaim(claimReset);
+      } catch (err) {
+        console.error('Submission failed:', err);
+      }
+    } 
   }
 
   return (
@@ -74,9 +72,12 @@ const ClaimsContainer = () => {
         claim={claim}
         handleOnChange={handleOnChange}
       />
+
+      {/* // TO DO: need to store this in a state in useeffect  */}
       {claimsData.postStatus === 'succeeded' && <p className='succeeded'>Claim has been submitted ✅</p>}
       {claimsData.postStatus === 'loading' && <p className='loading'>Submitting claim...</p>}
       {claimsData.postStatus === 'failed' && <p className='error'>Problem with submitting claim, try again</p>}
+
       <ExistingClaims 
         fetchStatus={claimsData.fetchStatus}
         setClaims={setClaims} 

@@ -14,7 +14,7 @@ interface Props {
 const SingleClaim = ({claim, claims, setClaims} : Props) => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [editClaim, setEditClaim] = useState<Claim>({date: claim.date, category: claim.category, description: claim.description, id: claim.id})
-    const editStatus = useSelector((state: RootState) => state.claims.editStatus);
+    // const editStatus = useSelector((state: RootState) => state.claims.editStatus);
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -37,9 +37,9 @@ const SingleClaim = ({claim, claims, setClaims} : Props) => {
 
   return (
     <div>
-      {editStatus === 'succeeded' && <p className='succeeded'>Claim has been edited ✅</p>}
+      {/* {editStatus === 'succeeded' && <p className='succeeded'>Claim has been edited ✅</p>}
       {editStatus === 'loading' && <p className='loading'>Submitting edit...</p>}
-      {editStatus === 'failed' && <p className='error'>Problem with editing claim, try again</p>}
+      {editStatus === 'failed' && <p className='error'>Problem with editing claim, try again</p>} */}
       <p><strong>Category:</strong> {claim.category}</p>
       <p><strong>Description:</strong> {claim.description}</p>
       <button onClick={() => handleDelete(claim.id)}>Delete</button>

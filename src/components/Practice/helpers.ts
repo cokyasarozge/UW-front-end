@@ -5,7 +5,7 @@ export interface Claim {
     id: number | null;
 }
 
-export interface Error {
+export interface FormErrors {
     date: boolean;
     category: boolean;
     description: boolean;
