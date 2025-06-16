@@ -1,12 +1,11 @@
 import React from 'react';
-
 import './App.css';
 import ClaimsContainer from './components/UW/ClaimsContainer';
-// import TodoApp from './components/NewToDo/TodoApp';
 
 
 function AppComponent() {
   console.log('render app')
+  
   return (
     <div className="App">
       <div className="App-container">

@@ -1,52 +1,63 @@
 import React from 'react'
-import { FormComponent, Claim, categories, FormErrors } from './types'
+import { Claim, categories } from './types';
 
 interface Props {
-  formItem: FormComponent;
-  error: FormErrors;
-  claim: Claim;
-  handleOnChange: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement>;
-  categoryInput: React.RefObject<HTMLSelectElement | null>;
-  dateInput: React.RefObject<HTMLInputElement | null>;
-  descriptionInput: React.RefObject<HTMLInputElement | null>;
+	formField: {
+		name: string;
+		type: string;
+	};
+	claim: Claim;
+	warnings: Omit<Claim, "id">;
+	handleOnChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+	onSubmit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>) => void;
+	categoryInput: React.RefObject<HTMLSelectElement | null>;
+	dateInput: React.RefObject<HTMLInputElement | null>;
+	descriptionInput: React.RefObject<HTMLInputElement | null>;
 }
 
 const InputField = ({
-  formItem,
-  error,
-  categoryInput,
-  claim,
-  handleOnChange,
-  dateInput,
-  descriptionInput
+	formField,
+	claim,
+	warnings,
+	handleOnChange,
+	onSubmit,
+	categoryInput,
+	descriptionInput,
+	dateInput
 } : Props) => {
+
   return (
-    formItem.type === 'select' ? 
-      <select 
-        aria-describedby={error[formItem.name as keyof FormErrors] ? `${formItem.name}-error` : undefined}
-        id={formItem.name}
-        className={error[formItem.name as keyof FormErrors] ? 'inputerror' : ''}
-        ref={categoryInput}
-        value={claim[formItem.name as keyof Claim] || ''} 
-        name={formItem.name} 
-        onChange={handleOnChange}
-      >
-        <option value="" disabled>Select your option</option>
-        {
-          categories.map(cat => <option key={cat}>{cat}</option>)
-        }
-      </select>
-    : 
-      <input
-        aria-describedby={error[formItem.name as keyof FormErrors] ? `${formItem.name}-error` : undefined}
-        id={formItem.name}
-        className={error[formItem.name as keyof FormErrors] ? 'inputerror' : ''}
-        ref={formItem.name === 'date' ? dateInput : descriptionInput}
-        value={claim[formItem.name as keyof Claim] || ''}
-        onChange={handleOnChange}
-        type={formItem.type}
-        name={formItem.name}
-      />
+    <div>
+			{formField.type === 'select' ?
+				<select 
+					aria-describedby={`${formField.name} select field`}
+					id={formField.name}
+					ref={categoryInput}
+					className={warnings[formField.name as keyof Omit<Claim, 'id'>] !== '' ? 'error-input' : ''}
+					name={formField.name} 
+					value={claim[formField.name as keyof Claim]}
+					onChange={e => handleOnChange(e)}
+				>
+					<option value="">Choose an option</option>
+					{categories.map(cat => <option value={cat}>{cat}</option>)}
+				</select>
+			: <input
+					aria-describedby={`${formField.name} input field`}
+					id={formField.name}
+					className={warnings[formField.name as keyof Omit<Claim, 'id'>] !== '' ? 'error-input' : ''}
+					ref={formField.name === 'date' ? dateInput : descriptionInput}
+					name={formField.name}
+					type={formField.type}
+					value={claim[formField.name as keyof Claim]}
+					onChange={e => handleOnChange(e)}
+					onKeyDown={(e) => {
+						if (e.key === 'Enter' && formField.name === 'description') {
+							onSubmit(e)
+						}
+					}}
+
+				/>}
+    </div>
   )
 }
 

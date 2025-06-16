@@ -1,33 +1,8 @@
-form {
-  > div {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 30px;
-
-    .inputerror {
-      border: 2px solid red;
-    }
-  }
+.warning, .error {
+  color: red;
 }
 
-.existing-claims {
-  > div {
-    border-bottom: 1px solid white;
-    padding: 10px;
-    
-    p {
-      padding: 0px;
-      margin: 0px 0px 10px 0px;
-    }
-  }
-}
-
-p, label {
-  font-size: 13px;
-  margin: 0px;
-}
-
-.succeeded {
+.success {
   color: green;
 }
 
@@ -35,6 +10,16 @@ p, label {
   color: yellow;
 }
 
-.error {
-  color: red;  
+label,
+p {
+  font-size: 11px;
+}
+
+.error-input {
+  border: 2px solid red;
+}
+
+.single-claim {
+  border: 1px solid white;
+  padding: 15px;
 }

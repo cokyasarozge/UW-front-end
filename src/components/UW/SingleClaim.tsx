@@ -1,16 +1,19 @@
-import React from 'react'
-import { Claim} from './types'
+import { Claim } from './types'
 
 interface Props {
   claim: Claim;
 }
 
-const SingleClaim = ({claim} : Props) => {
+const SingleClaim = ({
+  claim
+} : Props) => {
 
   return (
-    <div>
-      <p><strong>Category:</strong> {claim.category}</p>
-      <p><strong>Description:</strong> {claim.description}</p>
+    <div className='single-claim'>
+			<p>Date: {claim.date}</p>
+			<p>Id: {claim.id}</p>
+			<p>Description: {claim.description}</p>
+			<p>Category: {claim.category}</p>
     </div>
   )
 }

@@ -1,13 +1,14 @@
 import { Claim } from '../components/UW/types'
 
-type statusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-type errorType = string | null
+export interface Status {
+    error: string | null;
+    fulfilled: boolean;
+    isLoading: boolean;
+}
 
 export interface ClaimState {
     claims: Claim[];
-    fetchStatus: statusType;
-    fetchError: errorType;
-    postStatus: statusType;
-    postError: errorType;
+    fetchStatus: Status;
+    postStatus: Status;
 }
   

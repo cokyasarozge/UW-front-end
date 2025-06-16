@@ -2,12 +2,16 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { ClaimState } from './types'
 import { Claim } from '../components/UW/types'
 
+const initialStatus = {
+  error: null,
+  fulfilled: false,
+  isLoading: false
+}
+
 const initialState: ClaimState = {
   claims: [],
-  fetchStatus: 'idle',
-  fetchError: null,
-  postStatus: 'idle',
-  postError: null
+  fetchStatus: initialStatus,
+  postStatus: initialStatus
 };
 
 const URL = "http://localhost:3001" // backend url
@@ -62,31 +66,33 @@ const claimsSlice = createSlice({
     // Submit claim
     builder
       .addCase(submitClaim.pending, (state) => {
-        state.postStatus = 'loading';
-        state.postError = null;
+        state.postStatus.isLoading = true;
+        state.postStatus.error = null;
       })
       .addCase(submitClaim.fulfilled, (state, action: PayloadAction<Claim>) => {
-        state.postStatus = 'succeeded';
+        state.postStatus.fulfilled = true;
+        state.postStatus.isLoading = false;
         state.claims.push(action.payload);
       })
       .addCase(submitClaim.rejected, (state, action) => {
-        state.postStatus = 'failed';
-        state.postError = action.payload as string;
+        state.postStatus.isLoading = false;
+        state.postStatus.error = action.payload as string;
       });
 
     // Fetch claims
     builder
       .addCase(fetchClaims.pending, (state) => {
-        state.fetchStatus = 'loading';
-        state.fetchError = null;
+        state.fetchStatus.isLoading = true;
+        state.fetchStatus.error = null;
       })
       .addCase(fetchClaims.fulfilled, (state, action: PayloadAction<Claim[]>) => {
-        state.fetchStatus = 'succeeded';
+        state.fetchStatus.fulfilled = true;
+        state.fetchStatus.isLoading = false;
         state.claims = action.payload;
       })
       .addCase(fetchClaims.rejected, (state, action) => {
-        state.fetchStatus = 'failed';
-        state.fetchError = action.payload as string;
+        state.postStatus.isLoading = false;
+        state.fetchStatus.error = action.payload as string;
       });
 
   }
